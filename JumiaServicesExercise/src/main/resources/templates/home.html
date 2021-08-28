@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Customer Data</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+	integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+	crossorigin="anonymous">
+</head>
+<body>
+	<h1 align="center">Customer Data</h1>
+
+	<div class="container my-2">
+		<form action="#" th:action="@{/filter}" th:object="${getFilterData}" method="Post">
+			<span>Filter By Country</span> <select th:field="${getFilterData.selectedCountryName}" id="dropcountries"
+				name="value">
+				<option value="All">select All</option>
+				<option th:each="country : ${countryDetails}"
+					th:value="${country.phoneStartWith}"
+					th:text="${country.countryName}"></option>
+			</select> 
+			
+			<span>Filter By State</span> <select th:field="${getFilterData.selectedValideNotValid}" id="state" name="state">
+				<option value="All">select All</option>
+				<option value = "Valid">Valid</option>
+				<option value = "Not Valid">NOT Valid</option>
+			</select>
+
+			<button type="submit">Filter</button>
+
+		</form>
+		<div th:if="${customers != null}">
+			<table border="1" class="table table-striped table-responsive-md">
+				<thead>
+					<tr>
+						<td>Country</td>
+						<td>Name</td>
+						<td>Phone</td>
+						<td>State</td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="customer : ${customers}">
+						<td th:text="${customer.countryName}"></td>
+						<td th:text="${customer.name}"></td>
+						<td th:text="${customer.phone}"></td>
+						<td th:text="${customer.state}"></td>
+					</tr>
+
+				</tbody>
+			</table>
+		</div>
+
+
+		<div th:if="${totalPages > 0}">
+			<div class="row col-sm-10">
+				<div class="col-sm-2">Total Rows: [[${totalItems}]]</div>
+				<div class="col-sm-1">
+					<a th:if="${currentPage > 1}"
+						th:href="@{'/page/' + ${currentPage - 1}}">Back</a> <span
+						th:unless="${currentPage > 1}">Back</span>
+				</div>
+				<div>
+
+					<span th:each="i: ${#numbers.sequence(1, totalPages)}"> <a
+						th:if="${currentPage != i}" th:href="@{'/page/' + ${i}}">[[${i}]]</a>
+						<span th:unless="${currentPage != i}">[[${i}]]</span> &nbsp;
+						&nbsp;
+					</span>
+				</div>
+
+				<div class="col-sm-1">
+					<a th:if="${currentPage < totalPages}"
+						th:href="@{'/page/' + ${currentPage + 1}}">Next</a> <span
+						th:unless="${currentPage < totalPages}">Next</span>
+				</div>
+
+				<div class="col-sm-1">
+					<a th:if="${currentPage < totalPages}"
+						th:href="@{'/page/' + ${totalPages}}">Last</a> <span
+						th:unless="${currentPage < totalPages}">Last</span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+</body>
+</html>
